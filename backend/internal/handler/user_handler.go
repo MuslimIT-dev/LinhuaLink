@@ -29,7 +29,7 @@ func (h *userHandler) Signup(cxt *gin.Context) {
 	}
 	user, err := h.service.SignUp(req)
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		cxt.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
 	token, err := utils.GenerateJWT(user.ID)

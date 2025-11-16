@@ -29,7 +29,7 @@ func (r *userRepo) Signup(firstName, lastName, email, password string, birthDay 
 	user.LastName = lastName
 	user.Email = email
 	user.Password = password
-	user.BirthDay = birthDay.Format("2006-01-02")
+	user.BirthDay = birthDay
 	if err != nil {
 		return model.User{}, err
 	}
