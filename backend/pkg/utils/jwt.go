@@ -26,7 +26,7 @@ func ParseAndVerifyJWT(tokenString string) (map[string]interface{}, error) {
 			log.Println("unexpected signing method:", t.Header["alg"])
 			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
 		}
-		return []byte(config.GetEnv("JWT_SECRET_ACCESS")), nil
+		return []byte(config.GetEnv("JWT_SECRET")), nil
 	}
 
 	// Парсим и проверяем
