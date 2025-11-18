@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router";
-import LogIn from "./Pages/LogIn.jsx";
-import SignUp from "./Pages/SignUp.jsx";
+import LogIn from "./pages/login.jsx";
+import SignUp from "./pages/signup.jsx";
 
 function AppRouter() {
   return (
