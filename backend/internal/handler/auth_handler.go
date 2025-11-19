@@ -31,7 +31,6 @@ func NewAuthHandler(service service.AuthService) AuthHandler {
 // @Param input body model.RegisterUserInput true "Данные для регистрации"
 // @Success 200 {object} model.User "Success"
 // @Failure 400 {object} model.ErrorResponseCode400 "StatusBadRequest"
-// @Failure 401 {object} model.ErrorResponseCode401 "StatusUnauthorized"
 // @Failure 500 {object} model.ErrorResponseCode500 "StatusInternalServerError"
 // @Router /auth/signup [post]
 func (h *authHandler) Signup(cxt *gin.Context) {
@@ -63,7 +62,6 @@ func (h *authHandler) Signup(cxt *gin.Context) {
 // @Param input body model.LoginUserInput true "Данные для логина"
 // @Success 200 {object} model.User "Success"
 // @Failure 400 {object} model.ErrorResponseCode400 "StatusBadRequest"
-// @Failure 401 {object} model.ErrorResponseCode401 "StatusUnauthorized"
 // @Failure 500 {object} model.ErrorResponseCode500 "StatusInternalServerError"
 // @Router /auth/login [get]
 func (h *authHandler) Login(cxt *gin.Context) {
