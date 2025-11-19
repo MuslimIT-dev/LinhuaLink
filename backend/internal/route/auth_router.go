@@ -9,7 +9,8 @@ import (
 func RegisterAuthRoutes(cxt *gin.RouterGroup, h handler.AuthHandler) {
 	userApi := cxt.Group("/auth")
 	{
-		userApi.POST("/signup", h.Signup)
 		userApi.GET("/login", h.Login)
+		userApi.POST("/signup", h.Signup)
+		userApi.POST("/logout", h.Logout)
 	}
 }

@@ -16,6 +16,7 @@ type authHandler struct {
 type AuthHandler interface {
 	Signup(cxt *gin.Context)
 	Login(cxt *gin.Context)
+	Logout(cxt *gin.Context)
 }
 
 func NewAuthHandler(service service.AuthService) AuthHandler {
@@ -82,4 +83,17 @@ func (h *authHandler) Login(cxt *gin.Context) {
 	cxt.SetCookie("token", token, int((time.Hour * 24).Seconds()), "/", "", false, true)
 
 	cxt.JSON(200, gin.H{"status": true, "user": user})
+}
+
+// Logout godoc
+// @Summary Выход пользователя
+// @Description очищает JWT cookie
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.User "Success"
+// @Router /auth/login [get]
+func (h *authHandler) Logout(cxt *gin.Context) {
+	cxt.SetCookie("token", "", -1, "/", "", false, true)
+	cxt.JSON(200, gin.H{"status": true, "message": "Logged out successfully"})
 }
