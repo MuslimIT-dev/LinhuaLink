@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"LinhuaLink/backend/pkg/utils"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +12,6 @@ const contextUserId = "userId"
 func JWTAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenStr, err := c.Cookie("token")
-		fmt.Println(tokenStr)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "No token"})
 			c.Abort()

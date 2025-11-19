@@ -8,10 +8,8 @@ import (
 )
 
 func RegisterUserRoutes(cxt *gin.RouterGroup, h handler.UserHandler) {
-	userApi := cxt.Group("/user")
+	userApi := cxt.Group("/user", middleware.JWTAuthMiddleware())
 	{
-		userApi.POST("/signup", h.Signup)
-		userApi.GET("/login", h.Login)
-		userApi.GET("/me", middleware.JWTAuthMiddleware(), h.Me)
+		userApi.GET("/me", h.Me)
 	}
 }
