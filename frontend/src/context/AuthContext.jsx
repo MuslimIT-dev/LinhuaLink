@@ -58,6 +58,34 @@ export function AuthProvider({ children }) {
         }
     };
 
+    const signup = async (credentials) => {
+        const res = await fetch('/api/auth/signup', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(credentials),
+        });
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({ message: 'Signup failed' }));
+            throw err;
+        }
+
+        const profile = await fetch('/api/auth/me', {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        if (profile.ok) {
+            const { user } = await profile.json();
+            setUser(user);
+            return user;
+        } else {
+            setUser(null);
+            return null;
+        }
+    };
+
     const logout = async () => {
         try {
             await fetch('/api/auth/logout', {
@@ -73,7 +101,7 @@ export function AuthProvider({ children }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
             {children}
         </AuthContext.Provider>
     );
