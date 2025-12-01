@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const AuthContext = createContext();
+const API = '';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -11,7 +12,7 @@ export function AuthProvider({ children }) {
         let mounted = true;
         async function check() {
             try {
-                const res = await fetch('/api/auth/me', {
+                const res = await fetch(`${API}/auth/me`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: { 'Accept': 'application/json' },
@@ -35,7 +36,7 @@ export function AuthProvider({ children }) {
     }, []);
 
     const login = async (credentials) => {
-        const res = await fetch('/api/auth/login', {
+        const res = await fetch(`${API}/auth/login`, {
             method: 'POST',
             credentials: 'include', // сервер выставит httpOnly cookie
             headers: { 'Content-Type': 'application/json' },
@@ -47,7 +48,35 @@ export function AuthProvider({ children }) {
             throw err;
         }
 
-    const profile = await fetch('/api/auth/me', { method: 'GET', credentials: 'include' });
+    const profile = await fetch(`${API}/auth/me`, { method: 'GET', credentials: 'include' });
+        if (profile.ok) {
+            const { user } = await profile.json();
+            setUser(user);
+            return user;
+        } else {
+            setUser(null);
+            return null;
+        }
+    };
+
+    const signup = async (credentials) => {
+        const res = await fetch(`${API}/auth/signup`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(credentials),
+        });
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({ message: 'Signup failed' }));
+            throw err;
+        }
+
+        const profile = await fetch(`${API}/auth/me`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
         if (profile.ok) {
             const { user } = await profile.json();
             setUser(user);
@@ -60,7 +89,7 @@ export function AuthProvider({ children }) {
 
     const logout = async () => {
         try {
-            await fetch('/api/auth/logout', {
+            await fetch(`${API}/auth/logout`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Accept': 'application/json' },
@@ -73,7 +102,7 @@ export function AuthProvider({ children }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
             {children}
         </AuthContext.Provider>
     );
