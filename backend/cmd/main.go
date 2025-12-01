@@ -35,10 +35,15 @@ func main() {
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
 
+	interestRepository := repository.NewInterestRepository(database.DB)
+	interestService := service.NewInterestService(interestRepository)
+	interestHandler := handler.NewInterestHandler(interestService)
+
 	api := c.Group("/api")
 	{
 		route.RegisterAuthRoutes(api, authHandler)
 		route.RegisterUserRoutes(api, userHandler)
+		route.RegisterInterestRoutes(api, interestHandler)
 	}
 
 	c.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

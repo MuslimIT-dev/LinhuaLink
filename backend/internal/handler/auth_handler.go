@@ -64,7 +64,7 @@ func (h *authHandler) Signup(cxt *gin.Context) {
 // @Success 200 {object} model.User "Success"
 // @Failure 400 {object} model.ErrorResponseCode400 "StatusBadRequest"
 // @Failure 500 {object} model.ErrorResponseCode500 "StatusInternalServerError"
-// @Router /auth/login [get]
+// @Router /auth/login [post]
 func (h *authHandler) Login(cxt *gin.Context) {
 	var req model.LoginUserInput
 	if err := cxt.ShouldBindJSON(&req); err != nil {
@@ -92,7 +92,7 @@ func (h *authHandler) Login(cxt *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.User "Success"
-// @Router /auth/login [get]
+// @Router /auth/logout [post]
 func (h *authHandler) Logout(cxt *gin.Context) {
 	cxt.SetCookie("token", "", -1, "/", "", false, true)
 	cxt.JSON(200, gin.H{"status": true, "message": "Logged out successfully"})
