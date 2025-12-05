@@ -6,7 +6,7 @@ import (
 )
 
 type InterestService interface {
-	GetInterest() ([]model.Interest, error)
+	GetInterest() (map[string][]model.Interest, error)
 }
 type interestService struct {
 	interestRepo repository.InterestRepository
@@ -16,6 +16,6 @@ func NewInterestService(interestRepo repository.InterestRepository) InterestServ
 	return &interestService{interestRepo: interestRepo}
 }
 
-func (s *interestService) GetInterest() ([]model.Interest, error) {
+func (s *interestService) GetInterest() (map[string][]model.Interest, error) {
 	return s.interestRepo.GetInterest()
 }

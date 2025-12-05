@@ -6,7 +6,7 @@ import (
 )
 
 type InterestRepository interface {
-	GetInterest() ([]model.Interest, error)
+	GetInterest() (map[string][]model.Interest, error)
 }
 
 type interestRepo struct {
@@ -17,20 +17,24 @@ func NewInterestRepository(db *sql.DB) InterestRepository {
 	return &interestRepo{db: db}
 }
 
-func (r *interestRepo) GetInterest() ([]model.Interest, error) {
-	rows, err := r.db.Query("SELECT * FROM interest")
+func (r *interestRepo) GetInterest() (map[string][]model.Interest, error) {
+	rows, err := r.db.Query("SELECT name, category, popularity FROM interest")
 	if err != nil {
-		return []model.Interest{}, err
+		return nil, err
+	}
+	defer rows.Close()
+
+	interests := make(map[string][]model.Interest)
+
+	for rows.Next() {
+		var res model.Interest
+		var category string
+		if err := rows.Scan(&res.Name, &category, &res.Popularity); err != nil {
+			return nil, err
+		}
+
+		interests[category] = append(interests[category], res)
 	}
 
-	var interests []model.Interest
-	for rows.Next() {
-		var interest model.Interest
-		err := rows.Scan(&interest.Name, &interest.Category, &interest.Popularity)
-		if err != nil {
-			return []model.Interest{}, err
-		}
-		interests = append(interests, interest)
-	}
 	return interests, nil
 }
