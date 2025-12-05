@@ -18,6 +18,16 @@ func NewInterestHandler(service service.InterestService) InterestHandler {
 	return &interestHandler{service: service}
 }
 
+// GetInterest godoc
+// @Summary Получение всех интересов
+// @Description возвращает список всех интересов из базы данных
+// @Tags Interest
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} model.Interest "Success"
+// @Failure 401 {object} model.ErrorResponseCode401 "StatusUnauthorized"
+// @Failure 500 {object} model.ErrorResponseCode500 "StatusInternalServerError"
+// @Router /interest/ [get]
 func (h *interestHandler) GetInterest(cxt *gin.Context) {
 	interests, err := h.service.GetInterest()
 	if err != nil {
